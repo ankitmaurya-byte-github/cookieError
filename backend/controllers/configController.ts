@@ -1,21 +1,23 @@
+import {
+  configCategoryService,
+  configInventoryService,
+  configLocationService,
+} from "../services/configService";
 import { Request, response, Response } from "express";
 // import bcrypt from 'bcryptjs';
 // import jwt from 'jsonwebtoken';
 // import User from '../models/User';
 // import { JWT_SECRET } from '../config/constants';
 import config from "../config/configs";
-import UserService from "../services/userServices";
-import UserDetailsService from "../services/userDetailsServices";
-
-export const register = async (req: Request, res: Response) => {
-  const user = new UserService(config.development.postgress.client);
-  const Response = await user.createUser({
-    email: req.body.email,
-    password: req.body.password,
-  });
-  // console.log(response);
-  res.cookie("user", response);
-  res.status(200).json(Response);
+import { categoryModel } from "../model/configModel";
+export const addLocations = async (req: Request, res: Response) => {
+  const configService = new configLocationService(
+    config.development.postgress.client
+  );
+  // console.log(req.body);
+  const response = await configService.addLocations(req.body);
+  console.log(response);
+  return res.status(200).json(response);
   // try {
   //   const { email, password } = req.body;
   //   // Check if user exists
@@ -43,23 +45,21 @@ export const register = async (req: Request, res: Response) => {
   //   res.status(500).json({ message: 'Server error' });
   // }
 };
-export const login = async (req: Request, res: Response) => {
-  const user = new UserService(config.development.postgress.client);
-  const Response = await user.findUser(req.body.email);
-  if (!Response) {
-    res.status(404).json({ message: "email not found" });
-  } else {
-    if (Response.password === req.body.password) {
-      console.log(Response.dataValues);
-      res
-        .status(200)
-        .cookie("user", " Response.dataValues", {
-          httpOnly: true,
-        })
-        .json(Response);
-    } else {
-      res.status(404).json({ message: "password doesnt match" });
-    }
+export const addCategories = async (req: Request, res: Response) => {
+  const configService = new configCategoryService(
+    config.development.postgress.client
+  );
+  console.log(req.body);
+  try {
+    const response = await configService.addCategories(req.body);
+    console.log(response);
+    console.log("response");
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error("Error adding categories:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while adding categories" });
   }
   // try {
   //   const { email, password } = req.body;
@@ -88,11 +88,21 @@ export const login = async (req: Request, res: Response) => {
   //   res.status(500).json({ message: 'Server error' });
   // }
 };
-export const addUserDetails = async (req: Request, res: Response) => {
-  const info = new UserDetailsService(config.development.postgress.client);
-  // console.log(req.body);
-  const response = await info.addUserDetails(req.body);
-  return res.status(200).json(response);
+export const addInventoryNorms = async (req: Request, res: Response) => {
+  const configService = new configInventoryService(
+    config.development.postgress.client
+  );
+  try {
+    const response = await configService.addInventoryNorms(req.body);
+    console.log(response);
+    console.log("response");
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error("Error adding categories:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while adding categories" });
+  }
   // try {
   //   const { email, password } = req.body;
   //   // Check if user exists

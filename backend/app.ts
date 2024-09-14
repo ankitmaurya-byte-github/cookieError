@@ -8,13 +8,9 @@ const app: Application = express();
 const port: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 // Middleware setup
-app.use(
-  cors({
-    origin: "*",
-  })
-);
-app.use(express.json());
+app.use(cors());
 app.use(cookieParser());
+app.use(express.json());
 
 // Define a simple route
 app.use(userRouter);

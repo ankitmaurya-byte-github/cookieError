@@ -4,28 +4,30 @@ import {
 } from "../model/userDetailsModel";
 import userModel from "../model/userModel";
 
-class UserService {
+class UserDetailsService {
   public client: any;
   public models: any;
 
   constructor(sequelize: any) {
-    userModel(sequelize);
-
+    organisationInfoModel(sequelize);
+    userInfoModel(sequelize);
     this.client = sequelize;
     this.models = sequelize.models;
   }
-
-  async createUser({
-    email,
-    password,
+  async addUserDetails({
+    userInfo,
+    organisationInfo,
   }: {
-    email: string;
-    password: string;
+    userInfo: Record<string, unknown>;
+    organisationInfo: Record<string, unknown>;
   }): Promise<any> {
     try {
-      console.log(email + password);
-      const user = await this.models.users.create({ email, password });
-      return user;
+      const user = await this.models.userinfo.create(userInfo);
+      const organisation = await this.models.organisationinfo.create({
+        user_id: 4,
+        ...organisationInfo,
+      });
+      return { userInfo: user, organisationInfo: organisation };
     } catch (error) {
       console.error("Error fetching user:", error);
       if (error instanceof Error) {
@@ -50,4 +52,4 @@ class UserService {
   }
 }
 
-export default UserService;
+export default UserDetailsService;

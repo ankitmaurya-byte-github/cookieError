@@ -1,48 +1,8 @@
 import { DataTypes } from "sequelize";
 
-export const userInfoModel = (sequelize: any) => {
-  const User = sequelize.define(
-    "userinfo",
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      username: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-        unique: true,
-      },
-      firstname: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-      },
-      lastname: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-      },
-      role: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-      },
-    },
-    {
-      timestamps: false,
-      freezeTableName: true,
-    }
-  );
-  sequelize.sync().then(() => {
-    console.log("userDetails Model  synced with database");
-  });
-};
-export const organisationInfoModel = (sequelize: any) => {
-  const OrganisationInfo = sequelize.define(
-    "organisationinfo",
+export const locationModel = (sequelize: any) => {
+  const locationModel = sequelize.define(
+    "location",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -58,39 +18,49 @@ export const organisationInfoModel = (sequelize: any) => {
         },
         onDelete: "CASCADE",
       },
-      companyname: {
+
+      location: {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
-      companyemail: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-      },
-      contactnumber: {
+      latitude: {
         type: DataTypes.STRING(20),
         allowNull: false,
       },
-      address1: {
-        type: DataTypes.STRING(255),
+      longitude: {
+        type: DataTypes.STRING(20),
         allowNull: false,
       },
-      address2: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
+    },
+    {
+      timestamps: false,
+      freezeTableName: true,
+    }
+  );
+  sequelize.sync().then(() => {
+    console.log("locationModel Model  synced with database");
+  });
+};
+export const categoryModel = (sequelize: any) => {
+  const categoryModel = sequelize.define(
+    "category",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
       },
-      pincode: {
+      user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "userinfo",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
-      country: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-      },
-      state: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-      },
-      city: {
+
+      name: {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
@@ -101,7 +71,52 @@ export const organisationInfoModel = (sequelize: any) => {
     }
   );
   sequelize.sync().then(() => {
-    console.log("userDetails Model  synced with database");
+    console.log("categoryModel Model  synced with database");
+  });
+};
+export const inventoryModel = (sequelize: any) => {
+  const categoryModel = sequelize.define(
+    "inventorynorms",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "userinfo",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+      },
+
+      normbasis: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+      level: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+      days: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+      warehouse: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+    },
+    {
+      timestamps: false,
+      freezeTableName: true,
+    }
+  );
+  sequelize.sync().then(() => {
+    console.log("categoryModel Model  synced with database");
   });
 };
 
